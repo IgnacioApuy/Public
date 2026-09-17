@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecDigital | Portal Estudiantil</title>
+
+    <!-- Iconos -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f3f7fc;
+            color: #15315c;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           MENÚ LATERAL
+        ========================== */
+
+        .sidebar {
+            width: 245px;
+            background: linear-gradient(180deg, #062851, #0b3d72);
+            color: white;
+            padding: 24px 18px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .logo i {
+            font-size: 34px;
+            color: #39a4ff;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+        }
+
+        .logo span {
+            display: block;
+            font-size: 11px;
+            font-weight: normal;
+            color: #bcd8f1;
+            margin-top: 3px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 15px;
+            margin: 7px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu li:hover,
+        .menu li.active {
+            background: #1475d1;
+        }
+
+        .menu i {
+            width: 22px;
+            font-size: 18px;
+        }
+
+        .sidebar-message {
+            position: absolute;
+            bottom: 30px;
+            left: 28px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d8e9f8;
+        }
+
+        .sidebar-message strong {
+            display: block;
+            color: white;
+            font-size: 17px;
+        }
+
+        /* =========================
+           CONTENIDO
+        ========================== */
+
+        .main {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+        }
+
+        /* HEADER */
+
+        header {
+            height: 90px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            border-bottom: 1px solid #dbe6f3;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .search {
+            width: 48%;
+            position: relative;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 14px 50px 14px 20px;
+            border: 1px solid #d5dfeb;
+            border-radius: 25px;
+            outline: none;
+            font-size: 14px;
+            background: #f8fbff;
+        }
+
+        .search i {
+            position: absolute;
+            right: 20px;
+            top: 14px;
+            color: #0d5eb8;
+        }
+
+        .profile-area {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .notification {
+            position: relative;
+            font-size: 22px;
+            color: #0b5fb8;
+        }
+
+        .notification span {
+            position: absolute;
+            top: -7px;
+            right: -8px;
+            background: #ef3340;
+            color: white;
+            font-size: 10px;
+            padding: 3px 6px;
+            border-radius: 20px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #1e88e5, #65c8ff);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 20px;
+        }
+
+        .profile strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .profile small {
+            color: #7286a0;
+        }
+
+        /* =========================
+           DASHBOARD
+        ========================== */
+
+        .content {
+            padding: 26px;
+        }
+
+        .top-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 22px;
+        }
+
+        .hero {
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0, 38, 85, 0.9),
+                    rgba(4, 84, 160, 0.55)
+                ),
+                url("https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1500&q=80");
+            background-size: cover;
+            background-position: center;
+            min-height: 235px;
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero h2 {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 500px;
+            line-height: 1.4;
+        }
+
+        /* ANUNCIOS */
+
+        .announcements {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 5px 18px rgba(47, 76, 112, 0.08);
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .section-title h3 {
+            font-size: 19px;
+        }
+
+        .section-title a {
+            font-size: 13px;
+            color: #146bce;
+            text-decoration: none;
+        }
+
+        .announcement {
+            display: flex;
+            gap: 14px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e8eef5;
+        }
+
+        .announcement:last-child {
+            border-bottom: none;
+        }
+
+        .announcement-icon {
+            min-width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #e6f2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1475d1;
+        }
+
+        .announcement h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .announcement p {
+            font-size: 12px;
+            color: #6c8098;
+            line-height: 1.4;
+        }
+
+        /* =========================
+           TARJETAS
+        ========================== */
+
+        .quick-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .quick-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 5px 18px rgba(47, 76, 112, 0.07);
+            min-height: 210px;
+        }
+
+        .icon-box {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 23px;
+            margin-bottom: 18px;
+        }
+
+        .blue { background: #4187f6; }
+        .green { background: #20b985; }
+        .purple { background: #8547df; }
+        .orange { background: #f38d34; }
+
+        .quick-card h3 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .quick-card p {
+            color: #6d8098;
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 55px;
+        }
+
+        .quick-card button {
+            margin-top: 17px;
+            background: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .btn-blue {
+            color: #246fd8;
+            border: 1px solid #246fd8;
+        }
+
+        .btn-green {
+            color: #14976c;
+            border: 1px solid #20b985;
+        }
+
+        .btn-purple {
+            color: #7540cb;
+            border: 1px solid #8547df;
+        }
+
+        .btn-orange {
+            color: #d76c10;
+            border: 1px solid #f38d34;
+        }
+
+        /* =========================
+           PANEL INFERIOR
+        ========================== */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.05fr;
+            gap: 20px;
+            margin-top: 22px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 5px 18px rgba(47, 76, 112, 0.07);
+            min-height: 370px;
+        }
+
+        /* ENTREGAS */
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .task-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .task-icon {
+            width: 37px;
+            height: 37px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef5ff;
+            color: #347bd8;
+        }
+
+        .task h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .task small {
+            color: #7589a1;
+        }
+
+        .days {
+            font-size: 11px;
+            background: #edf4ff;
+            color: #3573c5;
+            border-radius: 20px;
+            padding: 6px 9px;
+        }
+
+        .urgent {
+            background: #ffe9eb;
+            color: #e63d4d;
+        }
+
+        /* PAGOS */
+
+        .balance {
+            background: #f4f8fe;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .balance small {
+            color: #75869b;
+        }
+
+        .balance h2 {
+            font-size: 30px;
+            margin: 8px 0 16px;
+        }
+
+        .balance button {
+            border: none;
+            background: #166dd0;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .payment {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #edf1f5;
+            font-size: 13px;
+        }
+
+        .payment small {
+            color: #7c8da1;
+            display: block;
+            margin-top: 3px;
+        }
+
+        .paid {
+            background: #dff7ec;
+            color: #19885e;
+            border-radius: 20px;
+            padding: 6px 11px;
+            font-size: 11px;
+        }
+
+        /* BIBLIOTECA */
+
+        .book-search {
+            display: flex;
+            margin-bottom: 16px;
+        }
+
+        .book-search input {
+            flex: 1;
+            border: 1px solid #dbe4ee;
+            padding: 12px;
+            border-radius: 9px 0 0 9px;
+            outline: none;
+        }
+
+        .book-search button {
+            width: 45px;
+            border: none;
+            background: #176ed1;
+            color: white;
+            border-radius: 0 9px 9px 0;
+        }
+
+        .book {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 13px 0;
+            border-bottom: 1px solid #edf1f5;
+        }
+
+        .book-cover {
+            width: 48px;
+            height: 65px;
+            border-radius: 5px;
+            background: linear-gradient(145deg, #123f73, #47a1da);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .book-info {
+            flex: 1;
+        }
+
+        .book-info h4 {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .book-info p {
+            font-size: 11px;
+            color: #73869b;
+        }
+
+        .book button {
+            background: white;
+            border: 1px solid #2075d3;
+            color: #1767bd;
+            border-radius: 7px;
+            padding: 7px 10px;
+            cursor: pointer;
+        }
+
+        /* =========================
+           CHATBOT
+        ========================== */
+
+        .chatbot {
+            position: fixed;
+            right: 28px;
+            bottom: 26px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1476da;
+            color: white;
+            padding: 11px 15px 11px 18px;
+            border-radius: 40px;
+            box-shadow: 0 7px 22px rgba(20, 84, 163, 0.35);
+            z-index: 50;
+        }
+
+        .chat-text {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .bot-icon {
+            width: 52px;
+            height: 52px;
+            background: white;
+            color: #1476da;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .bot-status {
+            position: absolute;
+            right: 3px;
+            top: -2px;
+            width: 13px;
+            height: 13px;
+            background: #ef3b4c;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        /* =========================
+           RESPONSIVE BÁSICO
+        ========================== */
+
+        @media(max-width: 1150px) {
+
+            .quick-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .top-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 800px) {
+
+            .sidebar {
+                width: 80px;
+            }
+
+            .sidebar .logo h1,
+            .sidebar .menu span,
+            .sidebar-message {
+                display: none;
+            }
+
+            .main {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+            }
+
+            .menu li {
+                justify-content: center;
+            }
+
+            .quick-cards,
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search {
+                width: 60%;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =========================
+         MENÚ LATERAL
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+
+            <h1>
+                TecDigital
+                <span>Portal Estudiantil</span>
+            </h1>
+        </div>
+
+        <ul class="menu">
+
+            <li class="active">
+                <i class="fa-solid fa-house"></i>
+                <span>Inicio</span>
+            </li>
+
+            <li>
+                <i class="fa-regular fa-user"></i>
+                <span>Mi perfil</span>
+            </li>
+
+            <li>
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Información académica</span>
+            </li>
+
+            <li>
+                <i class="fa-regular fa-folder-open"></i>
+                <span>Entregas</span>
+            </li>
+
+            <li>
+                <i class="fa-regular fa-credit-card"></i>
+                <span>Pagos</span>
+            </li>
+
+            <li>
+                <i class="fa-solid fa-book-open"></i>
+                <span>Biblioteca</span>
+            </li>
+
+            <li>
+                <i class="fa-regular fa-calendar"></i>
+                <span>Calendario</span>
+            </li>
+
+            <li>
+                <i class="fa-solid fa-table-cells-large"></i>
+                <span>Servicios</span>
+            </li>
+
+            <li>
+                <i class="fa-solid fa-headset"></i>
+                <span>Soporte</span>
+            </li>
+
+        </ul>
+
+        <div class="sidebar-message">
+            <strong>Aprende</strong>
+            Conecta<br>
+            Construye<br>
+            tu futuro
+        </div>
+
+    </aside>
+
+    <!-- =========================
+         PÁGINA PRINCIPAL
+    ========================== -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header>
+
+            <div class="search">
+                <input type="text" placeholder="¿Qué estás buscando?">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+
+            <div class="profile-area">
+
+                <div class="notification">
+                    <i class="fa-regular fa-bell"></i>
+                    <span>3</span>
+                </div>
+
+                <div class="profile">
+
+                    <div class="avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div>
+                        <strong>Estudiante TEC</strong>
+                        <small>Ingeniería en Computación</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- CONTENIDO -->
+
+        <section class="content">
+
+            <!-- HERO + ANUNCIOS -->
+
+            <div class="top-grid">
+
+                <div class="hero">
+                    <div>
+                        <h2>TecDigital</h2>
+
+                        <p>
+                            Más que una plataforma,
+                            es parte de tu historia.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="announcements">
+
+                    <div class="section-title">
+                        <h3>Noticias y anuncios</h3>
+                        <a href="#">Ver todas</a>
+                    </div>
+
+                    <div class="announcement">
+
+                        <div class="announcement-icon">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+
+                        <div>
+                            <h4>Inicio de inscripciones</h4>
+
+                            <p>
+                                Las inscripciones para el próximo
+                                semestre ya están disponibles.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="announcement">
+
+                        <div class="announcement-icon">
+                            <i class="fa-regular fa-file-lines"></i>
+                        </div>
+
+                        <div>
+                            <h4>Semana de exámenes</h4>
+
+                            <p>
+                                Consultá las fechas y requisitos
+                                en el calendario académico.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="announcement">
+
+                        <div class="announcement-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+
+                        <div>
+                            <h4>Feria de Innovación</h4>
+
+                            <p>
+                                Descubrí nuevos proyectos
+                                desarrollados por estudiantes.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACCESOS RÁPIDOS -->
+
+            <div class="quick-cards">
+
+                <div class="quick-card">
+
+                    <div class="icon-box blue">
+                        <i class="fa-regular fa-file-lines"></i>
+                    </div>
+
+                    <h3>Información</h3>
+
+                    <p>
+                        Consultá tus materias, horarios,
+                        calificaciones e información académica.
+                    </p>
+
+                    <button class="btn-blue">
+                        Ver ahora
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                </div>
+
+                <div class="quick-card">
+
+                    <div class="icon-box green">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+
+                    <h3>Entregas</h3>
+
+                    <p>
+                        Subí tareas, trabajos y proyectos
+                        de tus diferentes cursos.
+                    </p>
+
+                    <button class="btn-green">
+                        Ir a entregas
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                </div>
+
+                <div class="quick-card">
+
+                    <div class="icon-box purple">
+                        <i class="fa-regular fa-credit-card"></i>
+                    </div>
+
+                    <h3>Pagos</h3>
+
+                    <p>
+                        Realizá pagos en línea y consultá
+                        el historial de transacciones.
+                    </p>
+
+                    <button class="btn-purple">
+                        Ir a pagos
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                </div>
+
+                <div class="quick-card">
+
+                    <div class="icon-box orange">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+
+                    <h3>Biblioteca</h3>
+
+                    <p>
+                        Consultá libros, revistas y
+                        recursos académicos digitales.
+                    </p>
+
+                    <button class="btn-orange">
+                        Buscar libros
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- PANELES -->
+
+            <div class="dashboard-grid">
+
+                <!-- ENTREGAS -->
+
+                <div class="panel">
+
+                    <div class="section-title">
+                        <h3>
+                            <i class="fa-regular fa-calendar-check"></i>
+                            Próximas entregas
+                        </h3>
+
+                        <a href="#">Ver calendario</a>
+                    </div>
+
+                    <div class="task">
+
+                        <div class="task-left">
+
+                            <div class="task-icon">
+                                <i class="fa-regular fa-file"></i>
+                            </div>
+
+                            <div>
+                                <h4>Programación Orientada a Objetos</h4>
+                                <small>Proyecto Final</small>
+                            </div>
+
+                        </div>
+
+                        <span class="days urgent">
+                            En 2 días
+                        </span>
+
+                    </div>
+
+                    <div class="task">
+
+                        <div class="task-left">
+
+                            <div class="task-icon">
+                                <i class="fa-regular fa-file"></i>
+                            </div>
+
+                            <div>
+                                <h4>Bases de Datos</h4>
+                                <small>Consultas SQL</small>
+                            </div>
+
+                        </div>
+
+                        <span class="days">
+                            En 5 días
+                        </span>
+
+                    </div>
+
+                    <div class="task">
+
+                        <div class="task-left">
+
+                            <div class="task-icon">
+                                <i class="fa-regular fa-file"></i>
+                            </div>
+
+                            <div>
+                                <h4>Comunicación Técnica</h4>
+                                <small>Informe técnico</small>
+                            </div>
+
+                        </div>
+
+                        <span class="days">
+                            En 7 días
+                        </span>
+
+                    </div>
+
+                    <div class="task">
+
+                        <div class="task-left">
+
+                            <div class="task-icon">
+                                <i class="fa-regular fa-file"></i>
+                            </div>
+
+                            <div>
+                                <h4>Redes</h4>
+                                <small>Configuración LAN</small>
+                            </div>
+
+                        </div>
+
+                        <span class="days">
+                            En 9 días
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- PAGOS -->
+
+                <div class="panel">
+
+                    <div class="section-title">
+                        <h3>
+                            <i class="fa-regular fa-credit-card"></i>
+                            Estado de pagos
+                        </h3>
+
+                        <a href="#">Ver historial</a>
+                    </div>
+
+                    <div class="balance">
+
+                        <small>Saldo pendiente</small>
+
+                        <h2>₡ 82,500</h2>
+
+                        <button>
+                            Realizar pago
+                        </button>
+
+                    </div>
+
+                    <div class="payment">
+
+                        <div>
+                            <strong>Matrícula II semestre</strong>
+                            <small>10 Sep. 2026</small>
+                        </div>
+
+                        <span class="paid">
+                            Pagado
+                        </span>
+
+                    </div>
+
+                    <div class="payment">
+
+                        <div>
+                            <strong>Servicios estudiantiles</strong>
+                            <small>20 Ago. 2026</small>
+                        </div>
+
+                        <span class="paid">
+                            Pagado
+                        </span>
+
+                    </div>
+
+                    <div class="payment">
+
+                        <div>
+                            <strong>Seguro estudiantil</strong>
+                            <small>12 Ago. 2026</small>
+                        </div>
+
+                        <span class="paid">
+                            Pagado
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- BIBLIOTECA -->
+
+                <div class="panel">
+
+                    <div class="section-title">
+                        <h3>
+                            <i class="fa-solid fa-book-open"></i>
+                            Biblioteca Digital
+                        </h3>
+
+                        <a href="#">Ver todo</a>
+                    </div>
+
+                    <div class="book-search">
+
+                        <input
+                            type="text"
+                            placeholder="Buscar libro..."
+                            value="Inteligencia Artificial"
+                        >
+
+                        <button>
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="book">
+
+                        <div class="book-cover">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+
+                        <div class="book-info">
+                            <h4>Inteligencia Artificial</h4>
+                            <p>Stuart Russell & Peter Norvig</p>
+                        </div>
+
+                        <button>Ver</button>
+
+                    </div>
+
+                    <div class="book">
+
+                        <div class="book-cover">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+
+                        <div class="book-info">
+                            <h4>Clean Code</h4>
+                            <p>Robert C. Martin</p>
+                        </div>
+
+                        <button>Ver</button>
+
+                    </div>
+
+                    <div class="book">
+
+                        <div class="book-cover">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+
+                        <div class="book-info">
+                            <h4>Sistemas de Bases de Datos</h4>
+                            <p>Elmasri & Navathe</p>
+                        </div>
+
+                        <button>Ver</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- =========================
+     CHATBOT
+========================== -->
+
+<div class="chatbot">
+
+    <div class="chat-text">
+        ¿Necesitás ayuda?
+    </div>
+
+    <div class="bot-icon">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+
+    <div class="bot-status"></div>
+
+</div>
+
+</body>
+</html>
