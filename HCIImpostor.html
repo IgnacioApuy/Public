@@ -47,7 +47,7 @@ input{flex:1;min-width:0;font:inherit;font-size:1.05rem;color:var(--text);backgr
     <div id="entrada" style="margin-top:20px">
       <label for="clave">Contraseña</label>
       <div class="fila">
-        <input id="clave" type="password" autocomplete="off" placeholder="Para pasar a la siguiente ronda">
+        <input id="clave" type="password" autocomplete="off" placeholder="Escribe la contraseña">
         <button id="enviar" type="button">Siguiente</button>
       </div>
       <p class="error" id="error" role="alert"></p>
@@ -58,36 +58,47 @@ input{flex:1;min-width:0;font:inherit;font-size:1.05rem;color:var(--text);backgr
 <script>
 /* ===== CONFIGURACIÓN ===== */
 
-// Los 5 temas, en orden.
-const TEMAS = ["Playa", "Hospital", "Circo", "Biblioteca", "Aeropuerto"];
+// Los 7 temas, en orden.
+const TEMAS = [
+  "El TEC / La UCR",
+  "Memes / frases de Costa Rica",
+  "Fiestas (alcohol incluido)",
+  "Memes / cosas del 2026",
+  "Halloween",
+  "Grand Theft Auto",
+  "El gobierno"
+];
 
-// Las 5 contraseñas, en orden. La ronda N usa la contraseña (N-1) % 5.
-const CONTRASENAS = ["luna", "roble", "faro", "nube", "cobre"];
+// Contraseña que se pide justo después de elegir el grupo.
+const CLAVE_INICIO = "arranque";
+
+// Las 7 contraseñas, en orden. La ronda N usa la contraseña N de la lista.
+const CONTRASENAS = ["luna", "roble", "faro", "nube", "cobre", "marea", "trueno"];
 
 // Orden de temas de cada grupo (índices de TEMAS, cada orden es distinto).
-// La ronda N usa el tema ORDEN[grupo][(N-1) % 5].
+// La ronda N usa el tema ORDEN[grupo][N-1]. En una misma ronda, ningún grupo repite tema.
 const ORDEN = {
-  1: [0, 1, 2, 3, 4],
-  2: [1, 3, 4, 0, 2],
-  3: [2, 4, 0, 1, 3],
-  4: [4, 2, 3, 1, 0]
+  1: [3, 0, 5, 2, 6, 1, 4],
+  2: [5, 2, 6, 1, 4, 3, 0],
+  3: [6, 1, 4, 3, 0, 5, 2],
+  4: [4, 3, 0, 5, 2, 6, 1]
 };
 
 // Probabilidad de que una persona sea Impostor en cada ronda.
 // Se sortea en el dispositivo de cada persona al elegir su grupo.
 const PROB_IMPOSTOR = 1 / 5;
 
-const RONDA_FINAL = 5; // al pasar de la 5 se muestra el mensaje final
+const RONDA_FINAL = 7; // al pasar de la 7 se muestra el mensaje final
 
 /* ===== LÓGICA ===== */
-let grupo = null, ronda = 1, roles = [];
+let grupo = null, ronda = 1, roles = [], iniciado = false;
 
 const $ = id => document.getElementById(id);
 
 // El almacenamiento solo sirve para que, si la persona recarga la página,
 // conserve su grupo, su ronda y sus sorteos de impostor (no se vuelven a sortear).
 function guardar(){
-  try{ localStorage.setItem("impostor", JSON.stringify({grupo, ronda, roles})); }catch(e){}
+  try{ localStorage.setItem("impostor", JSON.stringify({grupo, ronda, roles, iniciado})); }catch(e){}
 }
 function limpiar(){
   try{ localStorage.removeItem("impostor"); }catch(e){}
@@ -96,7 +107,7 @@ function cargar(){
   try{
     const s = JSON.parse(localStorage.getItem("impostor") || "null");
     if(s && ORDEN[s.grupo] && s.ronda >= 1 && Array.isArray(s.roles) && s.roles.length === RONDA_FINAL){
-      grupo = s.grupo; ronda = s.ronda; roles = s.roles; return true;
+      grupo = s.grupo; ronda = s.ronda; roles = s.roles; iniciado = !!s.iniciado; return true;
     }
   }catch(e){}
   return false;
@@ -108,6 +119,15 @@ function pintar(){
   const p = $("pantalla");
   $("error").textContent = "";
   $("clave").value = "";
+
+  if(!iniciado){
+    p.innerHTML =
+      '<div class="ronda">Grupo ' + grupo + '</div>' +
+      '<div class="contenido">Ingresa la contraseña de inicio</div>';
+    $("entrada").classList.remove("hidden");
+    $("clave").focus();
+    return;
+  }
 
   if(ronda > RONDA_FINAL){
     p.innerHTML = '<div class="contenido fin">Ya no hay más rondas, gana el menor del grupo que quedó.</div>';
@@ -127,15 +147,16 @@ function pintar(){
 }
 
 function elegir(g){
-  grupo = g; ronda = 1;
+  grupo = g; ronda = 1; iniciado = false;
   roles = Array.from({length: RONDA_FINAL}, () => Math.random() < PROB_IMPOSTOR);
   guardar(); pintar();
 }
 
 function enviar(){
-  const esperada = CONTRASENAS[(ronda - 1) % CONTRASENAS.length];
+  const esperada = iniciado ? CONTRASENAS[ronda - 1] : CLAVE_INICIO;
   if($("clave").value.trim().toLowerCase() === esperada.toLowerCase()){
-    ronda++; guardar(); pintar();
+    if(iniciado) ronda++; else iniciado = true;
+    guardar(); pintar();
   }else{
     $("error").textContent = "Contraseña incorrecta.";
   }
